@@ -8,6 +8,13 @@ jobs:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Tree before pi-gen-action
+        run: tree
+      - name: Environment before pi-gen-action
+        run: env
       - name: Free space before pi-gen-action
         run: |
           echo "Free space:"
@@ -44,7 +51,7 @@ jobs:
           # images in stage2 (lite), stage4 and stage5. You probably want to hook in custom
           # stages before one of the exported stages. Otherwise, the action will make sure
           # any custom stage will include an image export directive.
-          stage-list: stage0 stage1 stage2 stage3 stage4 stage4-rebell
+          stage-list: stage0 stage1 stage2 stage3 stage4 ./stage4-rebell
           # Comma or whitespace separated list of additional packages to install on host 
           # before running pi-gen. Use this list to add any packages your custom stages may 
           # require. Note that this is not affecting the final image. In order to add 
