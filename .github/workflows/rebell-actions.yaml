@@ -8,6 +8,13 @@ jobs:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Tree before pi-gen-action
+        run: tree
+      - name: Environment before pi-gen-action
+        run: env
       - name: Free space before pi-gen-action
         run: |
           echo "Free space:"
