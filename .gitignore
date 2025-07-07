@@ -1,8 +1,8 @@
 deploy/*
 work/*
-config
-postrun.sh
-SKIP
-SKIP_IMAGES
 .pc
 *-pc
+*.sw*
+.gitignore.*
+wget-log*
+build.log

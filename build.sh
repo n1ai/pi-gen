@@ -3,7 +3,7 @@
 # shellcheck disable=SC2119
 run_sub_stage()
 {
-	log "Begin ${SUB_STAGE_DIR}"
+	log "DC: SS: Begin ${SUB_STAGE_DIR}"
 	pushd "${SUB_STAGE_DIR}" > /dev/null
 	for i in {00..99}; do
 		if [ -f "${i}-debconf" ]; then
@@ -76,12 +76,12 @@ EOF
 		fi
 	done
 	popd > /dev/null
-	log "End ${SUB_STAGE_DIR}"
+	log "DC: SS: End ${SUB_STAGE_DIR}"
 }
 
 
 run_stage(){
-	log "Begin ${STAGE_DIR}"
+	log "DC: RS: Begin ${STAGE_DIR}"
 	STAGE="$(basename "${STAGE_DIR}")"
 
 	pushd "${STAGE_DIR}" > /dev/null
@@ -120,7 +120,7 @@ run_stage(){
 	PREV_STAGE_DIR="${STAGE_DIR}"
 	PREV_ROOTFS_DIR="${ROOTFS_DIR}"
 	popd > /dev/null
-	log "End ${STAGE_DIR}"
+	log "DC: RS: End ${STAGE_DIR}"
 }
 
 term() {
@@ -170,6 +170,9 @@ do
 			;;
 	esac
 done
+
+printf "DC: 00: Begin Dump Vars\n"
+set -x
 
 export PI_GEN=${PI_GEN:-pi-gen}
 export PI_GEN_REPO=${PI_GEN_REPO:-https://github.com/RPi-Distro/pi-gen}
@@ -251,6 +254,8 @@ if [ "$SETFCAP" != "1" ]; then
 	export CAPSH_ARG="--drop=cap_setfcap"
 fi
 
+printf "DC: 00: End Dump Vars\n"
+set +x
 mkdir -p "${WORK_DIR}"
 trap term EXIT INT TERM
 
@@ -310,10 +315,11 @@ if [[ "${PUBKEY_ONLY_SSH}" = "1" && -z "${PUBKEY_SSH_FIRST_USER}" ]]; then
 	exit 1
 fi
 
-log "Begin ${BASE_DIR}"
+log "DC: BD: Begin ${BASE_DIR}"
 
 STAGE_LIST=${STAGE_LIST:-${BASE_DIR}/stage*}
 export STAGE_LIST
+log "DC: BD: Stage List: ${STAGE_LIST}"
 
 EXPORT_CONFIG_DIR=$(realpath "${EXPORT_CONFIG_DIR:-"${BASE_DIR}/export-image"}")
 if [ ! -d "${EXPORT_CONFIG_DIR}" ]; then

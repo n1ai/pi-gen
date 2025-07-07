@@ -1,0 +1,13 @@
+vim
+vim-gtk3
+tmux
+cmake
+build-essential
+ninja-build
+git
+pkg-config
+xterm
+tree
+htop
+screenfetch
+gnome-screenshot
