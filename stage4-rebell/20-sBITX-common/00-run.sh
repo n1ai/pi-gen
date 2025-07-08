@@ -9,12 +9,14 @@ echo "DC: RS: 0: `date` $PWD $0"
 # 4) add wm8731 audio codec support
 # 5) add gpio i2c defines
 on_chroot << JKL
-  set -x
+  set -xv
   pwd
   tree /boot
+  ls -l /boot/config.txt
+  ls -l /boot/firmware/config.txt
   sed -i 's/^dtparam=audio=on$/#dtparam=audio=on/' /boot/firmware/config.txt
   sed -i 's/^dtoverlay=vc4-kms-v3d$/dtoverlay=vc4-kms-v3d,noaudio/' /boot/firmware/config.txt
-  if [ `grep -c '^# added for sBITX:$' /boot/firmware/config.txt` -eq 0 ]
+  if [ `grep -c "added for sBITX:" /boot/firmware/config.txt` -eq 0 ]
   then
     (
       echo '# added for sBITX:'
@@ -33,14 +35,14 @@ on_chroot << JKL
       echo 'dtoverlay=i2c-rtc-gpio,ds1307,i2c_gpio_delay_us=10,bus=2,i2c_gpio_sda=13,i2c_gpio_scl=6'
     ) >> /boot/firmware/config.txt
   fi
-  set +x
+  set +xv
 JKL
 
 echo "DC: RS: 1: `date` $PWD $0"
 
 # set up the snd_aloop module as required by sbitx
 on_chroot << MNO
-  set -x
+  set -vx
   echo "options snd_aloop enable=1,1,1,1 index=1,2,3,4" > \
 	/etc/modprobe.d/sbitx-loop.conf
   chmod 644 /etc/modprobe.d/sbitx-loop.conf
@@ -48,6 +50,6 @@ on_chroot << MNO
   then
     echo "snd_aloop" >> /etc/modules
   fi
-  set +x
+  set +vx
 MNO
 
